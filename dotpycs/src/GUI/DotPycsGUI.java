@@ -171,6 +171,8 @@ public class DotPycsGUI extends JFrame {
         btAdden = new JButton();
         lbPlatzhalter = new JLabel();
 
+        txtGuideID.setEnabled(false);
+        
         //Tabs auf der linken Seite anzeigen
         tabPane.setTabPlacement(JTabbedPane.LEFT);
 
