@@ -86,6 +86,7 @@ public class DotPycsGUI extends JFrame {
 
         try {
             dbq = new DataBaseQueries();
+            dbq.toString();
         } catch (SQLException ex) {
             System.out.println(ex.toString());
         }
