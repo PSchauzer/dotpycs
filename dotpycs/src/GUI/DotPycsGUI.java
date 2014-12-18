@@ -25,6 +25,7 @@ import java.awt.event.ItemListener;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.io.File;
+import java.io.IOException;
 import java.net.MalformedURLException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -35,6 +36,7 @@ import javax.swing.JButton;
 import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JEditorPane;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenuItem;
@@ -68,7 +70,7 @@ public class DotPycsGUI extends JFrame {
     public DotPycsGUI() throws HeadlessException {
 
         initComponents();
-
+        
         //Fenstergröße setzen
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
         
@@ -81,7 +83,7 @@ public class DotPycsGUI extends JFrame {
         //Titel setzen
         this.setTitle("DotPYCS - Guideverwaltung © Yvonne Hartner, Corinna Kindlhofer, Sarah Resch, Philipp Schauzer");
         
-        
+        firstInit();
     }
 
     public void initComponents() {
@@ -652,6 +654,20 @@ public class DotPycsGUI extends JFrame {
     }
      
      
+     public void firstInit()
+     {
+        try {
+            JFileChooser fc = new JFileChooser();
+            fc.showOpenDialog(null);
+            String pathname = fc.getSelectedFile().getAbsolutePath();
+            TableModelUebersichtFrei tmuf = new TableModelUebersichtFrei();
+            
+            tmuf.firstInit(pathname);
+            tableFrei.updateUI();
+        } catch (IOException ex) {
+            Logger.getLogger(DotPycsGUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+     }
 
     public static void main(String[] args) {
         new DotPycsGUI().setVisible(true);

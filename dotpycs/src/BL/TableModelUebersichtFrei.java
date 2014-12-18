@@ -4,6 +4,10 @@ import java.util.Collections;
 import java.util.LinkedList;
 import javax.swing.table.AbstractTableModel;
 import com.dotPycsLib.Modelclasses.*;
+import java.io.BufferedReader;
+import java.io.FileNotFoundException;
+import java.io.FileReader;
+import java.io.IOException;
 
 public class TableModelUebersichtFrei extends AbstractTableModel {
 
@@ -29,7 +33,7 @@ public class TableModelUebersichtFrei extends AbstractTableModel {
     @Override
     public Object getValueAt(int rowIndex, int columnIndex) {
         Guide g = listeFreiFilter.get(rowIndex);
-        
+
         switch (columnIndex) {
             case 0:
                 return g.getFirst_name() + " " + g.getLast_name();
@@ -46,10 +50,13 @@ public class TableModelUebersichtFrei extends AbstractTableModel {
 
     public void addGuide(Guide g) {
         if (!listeFrei.contains(g)) {
+            
             listeFrei.add(g);
+            
         }
         Collections.sort(listeFrei, new GuideComparer());
         listeFreiFilter = (LinkedList<Guide>) listeFrei.clone();
+        System.out.println(listeFreiFilter.size());
         fireTableRowsInserted(0, listeFreiFilter.size());
     }
 
@@ -61,29 +68,42 @@ public class TableModelUebersichtFrei extends AbstractTableModel {
         return listeFreiFilter.get(row).getTel_no();
     }
 
-    public void filterListe(String department) 
-    {
+    public void filterListe(String department) {
         listeFreiFilter.clear();
         for (Guide g : listeFrei) {
-            
-            System.out.println("g-DEPT: "+g.getDept());
-            System.out.println("dept: "+department);
-            
-            if (department.equals("MECHA/AUT") && g.getDept().equals("MECHA/AUT") && !listeFreiFilter.contains(g))
-            {
+
+            System.out.println("g-DEPT: " + g.getDept());
+            System.out.println("dept: " + department);
+
+            if (department.equals("MECHA/AUT") && g.getDept().equals("MECHA/AUT") && !listeFreiFilter.contains(g)) {
                 listeFreiFilter.add(g);
-            } 
-            else if (department.equals("EDV") && g.getDept().equals("EDV") && !listeFreiFilter.contains(g))
-            {
+            } else if (department.equals("EDV") && g.getDept().equals("EDV") && !listeFreiFilter.contains(g)) {
                 listeFreiFilter.add(g);
-            }
-            else if(department.equals("all"))
-            {
+            } else if (department.equals("all")) {
                 listeFreiFilter = listeFrei;
             }
-            
+
         }
         Collections.sort(listeFreiFilter, new GuideComparer());
         this.fireTableRowsUpdated(0, listeFreiFilter.size());
+    }
+
+    public void firstInit(String filename) throws FileNotFoundException, IOException 
+    {       
+        FileReader fr = new FileReader(filename);
+        BufferedReader br = new BufferedReader(fr);
+        String str = "";
+        String[] strArray;
+        
+        listeFrei.clear();
+        listeFreiFilter.clear();
+        while ((str = br.readLine()) != null) {
+            strArray = str.split(";");
+            Guide g = new Guide(strArray[0], strArray[1], strArray[2], strArray[3], strArray[4], strArray[5], strArray[6]);
+            
+            this.addGuide(g);
+        }
+        br.close();
+
     }
 }
