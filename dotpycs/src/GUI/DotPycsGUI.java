@@ -52,7 +52,8 @@ import javax.swing.SpinnerDateModel;
 import javax.swing.UIManager;
 import javax.swing.border.TitledBorder;
 import javax.swing.text.html.HTMLEditorKit;
-
+import com.dotPycsLib.*;
+import java.sql.SQLException;
 /**
  *
  * @author Corinna und PETER und BERNHARD
@@ -66,14 +67,14 @@ public class DotPycsGUI extends JFrame {
     private Date date = new Date();
     SpinnerDateModel smNorth = new SpinnerDateModel(date, null, null, Calendar.MINUTE);
     SpinnerDateModel smSouth = new SpinnerDateModel(date, null, null, Calendar.MINUTE);
-
+    private DataBaseQueries dbq;
     public DotPycsGUI() throws HeadlessException {
 
         initComponents();
-        
+
         //Fenstergröße setzen
         this.setExtendedState(JFrame.MAXIMIZED_BOTH);
-        
+
         //Verhalten bei Schließung von Programm
         this.setDefaultCloseOperation(EXIT_ON_CLOSE);
 
@@ -82,7 +83,12 @@ public class DotPycsGUI extends JFrame {
 
         //Titel setzen
         this.setTitle("DotPYCS - Guideverwaltung © Yvonne Hartner, Corinna Kindlhofer, Sarah Resch, Philipp Schauzer");
-        
+
+        try {
+            dbq = new DataBaseQueries();
+        } catch (SQLException ex) {
+            System.out.println(ex.toString());
+        }
         firstInit();
     }
 
@@ -147,24 +153,23 @@ public class DotPycsGUI extends JFrame {
         paVerwaltenPanel3South = new JPanel();
         paVerwaltenPanel4South = new JPanel();
         btJetztSouth = new JButton("jetzt");
-        paVerwaltenSouthSouth = new JPanel(); 
-        txtGuideID = new JTextField(); 
-        txtLastname = new JTextField(); 
-        txtFirstname = new JTextField(); 
-        coGuideClass = new JComboBox(); 
-        txtSkypeID = new JTextField(); 
-        txtTelNo = new JTextField(); 
-        coDept = new JComboBox(); 
-        lbGuideID = new JLabel(); 
-        lbLastname = new JLabel(); 
-        lbFirstname = new JLabel(); 
-        lbGuideClass = new JLabel(); 
-        lbSkypeID = new JLabel(); 
-        lbTelNo = new JLabel(); 
-        lbDept = new JLabel(); 
-        btAdden = new JButton(); 
+        paVerwaltenSouthSouth = new JPanel();
+        txtGuideID = new JTextField();
+        txtLastname = new JTextField();
+        txtFirstname = new JTextField();
+        coGuideClass = new JComboBox();
+        txtSkypeID = new JTextField();
+        txtTelNo = new JTextField();
+        coDept = new JComboBox();
+        lbGuideID = new JLabel();
+        lbLastname = new JLabel();
+        lbFirstname = new JLabel();
+        lbGuideClass = new JLabel();
+        lbSkypeID = new JLabel();
+        lbTelNo = new JLabel();
+        lbDept = new JLabel();
+        btAdden = new JButton();
         lbPlatzhalter = new JLabel();
-        
 
         //Tabs auf der linken Seite anzeigen
         tabPane.setTabPlacement(JTabbedPane.LEFT);
@@ -199,7 +204,7 @@ public class DotPycsGUI extends JFrame {
         cbEdvBesetzt.setBackground(Color.white);
         cbAutMechaBesetzt.setOpaque(true);
         cbAutMechaBesetzt.setBackground(Color.white);
-        
+
         //set Checkboxes selected
         cbEdvBesetzt.setSelected(true);
         cbAutMechaBesetzt.setSelected(true);
@@ -245,63 +250,55 @@ public class DotPycsGUI extends JFrame {
         tabPane.addTab("Verwalten", paVerwalten);
         tabPane.addTab("Statistik", paStatistik);
         tabPane.addTab("Impressum", paImpressum);
-        
+
         //Bearbeiten Komponenten paVerwaltenSouth
         paVerwaltenSouth.setLayout(new BorderLayout());
-        paVerwaltenSouthSouth.setLayout(new GridLayout(8,2));
-        
+        paVerwaltenSouthSouth.setLayout(new GridLayout(8, 2));
+
         //Beschriften von Komponenten auf paVerwaltenSouthSouth
         lbGuideID.setText("GuideId:");
         lbLastname.setText("Nachname:");
         lbFirstname.setText("Vorname:");
-        lbGuideClass.setText("Klasse:");      
-        lbSkypeID.setText("SkypeID:");        
+        lbGuideClass.setText("Klasse:");
+        lbSkypeID.setText("SkypeID:");
         lbTelNo.setText("Tel.Nr.:");
-        lbDept.setText("Abteilung:");     
-        btAdden.setText("Guide hinzufügen"); 
-        
+        lbDept.setText("Abteilung:");
+        btAdden.setText("Guide hinzufügen");
+
         impressum = new JEditorPane();
         //impressum.setBorder(new TitledBorder("Impressum"));
         impressum.setEditorKit(new HTMLEditorKit());
-        
-        
+
         impressum.setText("<br/><h1>Haftungshinweis:</h1><p>Trotz sorgfältiger inhaltlicher "
                 + "Kontrolle übernehmen wir keine Haftung für die Inhalte. <br/>"
                 + "</p><h1><br/>Copyright:</h1><p>© 2014 by Projektgruppe dotPYCS.<br/>Alle Rechte "
                 + "vorbehalten. Die Inhalte dieses Programms dienen ausschließlich zur "
                 + "Information <br/>und Verwaltung.Übernahme und Nutzung der Daten zu anderen "
                 + "Zwecken bedarf der <br/>schriftlichen Zustimmung der Projektgruppe dotPYCS</p>"
-                + "<br/><h1>Ansprechpartner:</h1><p>Sarah Resch<br/>Corinna Kindlhofer<br/>" 
-                +"Yvonne Hartner<br/>Phillipp Schauzer");
-        
+                + "<br/><h1>Ansprechpartner:</h1><p>Sarah Resch<br/>Corinna Kindlhofer<br/>"
+                + "Yvonne Hartner<br/>Phillipp Schauzer");
+
         //Comboboxen befüllen paVerwaltenSouthSouth
-    
-        for (int i = 1; i < 6; i++) 
-        {
-            coGuideClass.addItem(i+"AHIF");
+        for (int i = 1; i < 6; i++) {
+            coGuideClass.addItem(i + "AHIF");
         }
-        for (int i = 1; i < 6; i++) 
-        {
-            coGuideClass.addItem(i+"BHIF");
+        for (int i = 1; i < 6; i++) {
+            coGuideClass.addItem(i + "BHIF");
         }
-        for (int i = 1; i < 6; i++) 
-        {
-            coGuideClass.addItem(i+"CHIF");
+        for (int i = 1; i < 6; i++) {
+            coGuideClass.addItem(i + "CHIF");
         }
         coGuideClass.addItem("1DHIF");
-        for (int i = 1; i < 6; i++) 
-        {
-            coGuideClass.addItem(i+"AHMBA");
+        for (int i = 1; i < 6; i++) {
+            coGuideClass.addItem(i + "AHMBA");
         }
-        for (int i = 1; i < 6; i++) 
-        {
-            coGuideClass.addItem(i+"BHMBA");
+        for (int i = 1; i < 6; i++) {
+            coGuideClass.addItem(i + "BHMBA");
         }
-        for (int i = 1; i < 6; i++) 
-        {
-            coGuideClass.addItem(i+"AHMEA");
+        for (int i = 1; i < 6; i++) {
+            coGuideClass.addItem(i + "AHMEA");
         }
-        
+
         coDept.addItem("EDV");
         coDept.addItem("MECHA/AUT");
 
@@ -367,8 +364,8 @@ public class DotPycsGUI extends JFrame {
         for (int i = 0; i < 10; i++) {
             paVerwaltenNorthSouth.add(new JPanel());
         }
-        
-         //Adden von Komponenten auf paVerwaltenSouthSouth
+
+        //Adden von Komponenten auf paVerwaltenSouthSouth
         paVerwaltenSouthSouth.add(lbGuideID);
         paVerwaltenSouthSouth.add(txtGuideID);
         paVerwaltenSouthSouth.add(lbLastname);
@@ -385,7 +382,7 @@ public class DotPycsGUI extends JFrame {
         paVerwaltenSouthSouth.add(coDept);
         paVerwaltenSouthSouth.add(lbPlatzhalter);
         paVerwaltenSouthSouth.add(btAdden);
-        
+
         paVerwaltenSouth.add(paVerwaltenSouthSouth, BorderLayout.CENTER);
 
         //Tabs designen
@@ -496,7 +493,7 @@ public class DotPycsGUI extends JFrame {
             }
         });
 //--------------------------TABELLE TESTEN-----------------------------------------
-        
+
         //ENIS AUF STRING ÄNDERN
         Guide g = new Guide("999", "Lushtaku", "Enis", "4AHIF", "geileralbaner", "066466666", "EDV");
         Guide g2 = new Guide("999", "Micevic", "Tin", "4BHIF", "geilerkroate", "066466666", "EDV");
@@ -510,9 +507,8 @@ public class DotPycsGUI extends JFrame {
         ModelBesetzt.addGuide(g3);
         ModelFrei.addGuide(g4);
         ModelBesetzt.addGuide(g4);
-        
- //------------------------TESTEN ENDE---------------------------------------------
-        
+
+        //------------------------TESTEN ENDE---------------------------------------------
         cbAutMechaFrei.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -527,8 +523,6 @@ public class DotPycsGUI extends JFrame {
             }
         });
 
-        
-
         cbEdvBesetzt.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -542,132 +536,107 @@ public class DotPycsGUI extends JFrame {
                 filterBesetzt(e);
             }
         });
-        
+
         //Guides hinzufügen
         btAdden.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                 guideHinzufuegen(e); 
+                guideHinzufuegen(e);
             }
         });
-        
+
         //Comboboxen geändert
         coGuideClass.addItemListener(new ItemListener() {
 
             @Override
             public void itemStateChanged(ItemEvent e) {
-            
-            if(coGuideClass.getSelectedItem().toString().contains("HIF"))
-            {
-                coDept.setSelectedItem("EDV");
-            }
-            else
-            {
-                coDept.setSelectedItem("MECHA/AUT");
-            }
+
+                if (coGuideClass.getSelectedItem().toString().contains("HIF")) {
+                    coDept.setSelectedItem("EDV");
+                } else {
+                    coDept.setSelectedItem("MECHA/AUT");
+                }
             }
         });
 
     }
 
-    public void filterFrei(ActionEvent e) 
-    {
+    public void filterFrei(ActionEvent e) {
         String filter = "";
-        
-        if (cbEdvFrei.isSelected()) 
-        {
+
+        if (cbEdvFrei.isSelected()) {
             filter = "EDV";
         }
-        if (cbAutMechaFrei.isSelected()) 
-        {
+        if (cbAutMechaFrei.isSelected()) {
             filter = "MECHA/AUT";
         }
-        if (cbAutMechaFrei.isSelected() && cbEdvFrei.isSelected())
-        {
+        if (cbAutMechaFrei.isSelected() && cbEdvFrei.isSelected()) {
             filter = "all";
         }
-        
-        
+
         ModelFrei.filterListe(filter);
         tableFrei.updateUI();
     }
-    
-    public void filterBesetzt(ActionEvent e) 
-    {
+
+    public void filterBesetzt(ActionEvent e) {
         String filter = "";
-        
-        if (cbEdvBesetzt.isSelected()) 
-        {
+
+        if (cbEdvBesetzt.isSelected()) {
             filter = "EDV";
         }
-        if (cbAutMechaBesetzt.isSelected()) 
-        {
+        if (cbAutMechaBesetzt.isSelected()) {
             filter = "MECHA/AUT";
         }
-        if (cbAutMechaBesetzt.isSelected() && cbEdvBesetzt.isSelected())
-        {
-            filter = "";
+        if (cbAutMechaBesetzt.isSelected() && cbEdvBesetzt.isSelected()) {
+            filter = "all";
         }
-        
-        
-        
+
         ModelBesetzt.filterListe(filter);
         tableBesetzt.updateUI();
     }
-    
-     public void guideHinzufuegen(ActionEvent e)
-    {
-        
-        try 
-        {
-            
-        
-            String id = txtGuideID.getText(); 
+
+    public void guideHinzufuegen(ActionEvent e) {
+
+        try {
+
+            String id = txtGuideID.getText();
             String nachname = txtLastname.getText();
-            String vorname = txtFirstname.getText(); 
-            String skypeName = txtSkypeID.getText().toString(); 
-            String telNr = txtTelNo.getText(); 
-            String klasse = coGuideClass.getSelectedItem().toString(); 
-            String abteilung = coDept.getSelectedItem().toString(); 
+            String vorname = txtFirstname.getText();
+            String skypeName = txtSkypeID.getText();
+            String telNr = txtTelNo.getText();
+            String klasse = coGuideClass.getSelectedItem().toString();
+            String abteilung = coDept.getSelectedItem().toString();
+
             
-            if(abteilung.contains("EDV"))
-            {
-                Guide g = new Guide(id, nachname, vorname, klasse, skypeName, telNr, "EDV");
-                ModelFrei.addGuide(g);
-                ModelBesetzt.addGuide(g);
-            }
-            else
-            {
-                Guide g = new Guide(id, nachname, vorname, klasse, skypeName, telNr, "MECHA");
-                ModelFrei.addGuide(g);
-                ModelBesetzt.addGuide(g);
-            }
+            Guide g = new Guide(id, nachname, vorname, klasse, skypeName, telNr, "EDV");
+            ModelFrei.addGuide(g);
+            ModelBesetzt.addGuide(g);
             
-            
-        } 
-        catch (Exception ex) 
-        {
+            dbq.addGuide(g);
+
+        } catch (SQLException ex) {
             System.out.println(ex.toString());
         }
-        
-        
+
     }
-     
-     
-     public void firstInit()
-     {
+
+    public void firstInit() {
         try {
             JFileChooser fc = new JFileChooser();
             fc.showOpenDialog(null);
-            String pathname = fc.getSelectedFile().getAbsolutePath();
-            TableModelUebersichtFrei tmuf = new TableModelUebersichtFrei();
-            
-            tmuf.firstInit(pathname);
-            tableFrei.updateUI();
+            File f = fc.getSelectedFile();
+            if (f != null) {
+                String pathname = f.getAbsolutePath();
+
+                TableModelUebersichtFrei tmuf = new TableModelUebersichtFrei();
+
+                tmuf.firstInit(pathname);
+                tableFrei.updateUI();
+            }
         } catch (IOException ex) {
             Logger.getLogger(DotPycsGUI.class.getName()).log(Level.SEVERE, null, ex);
         }
-     }
+    }
 
     public static void main(String[] args) {
         new DotPycsGUI().setVisible(true);
@@ -721,21 +690,21 @@ public class DotPycsGUI extends JFrame {
     private JPanel paVerwaltenPanel3South;
     private JPanel paVerwaltenPanel4South;
     private JButton btJetztSouth;
-    private JPanel paVerwaltenSouthSouth; 
-    private JTextField txtGuideID; 
-    private JTextField txtLastname; 
-    private JTextField txtFirstname; 
-    private JComboBox coGuideClass; 
-    private JTextField txtSkypeID; 
-    private JTextField txtTelNo; 
-    private JComboBox coDept; 
-    private JLabel lbGuideID; 
-    private JLabel lbLastname; 
-    private JLabel lbFirstname; 
-    private JLabel lbGuideClass; 
-    private JLabel lbSkypeID; 
-    private JLabel lbTelNo; 
-    private JLabel lbDept; 
-    private JButton btAdden; 
-    private JLabel lbPlatzhalter; 
+    private JPanel paVerwaltenSouthSouth;
+    private JTextField txtGuideID;
+    private JTextField txtLastname;
+    private JTextField txtFirstname;
+    private JComboBox coGuideClass;
+    private JTextField txtSkypeID;
+    private JTextField txtTelNo;
+    private JComboBox coDept;
+    private JLabel lbGuideID;
+    private JLabel lbLastname;
+    private JLabel lbFirstname;
+    private JLabel lbGuideClass;
+    private JLabel lbSkypeID;
+    private JLabel lbTelNo;
+    private JLabel lbDept;
+    private JButton btAdden;
+    private JLabel lbPlatzhalter;
 }

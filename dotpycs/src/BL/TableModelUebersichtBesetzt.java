@@ -69,7 +69,7 @@ public class TableModelUebersichtBesetzt extends AbstractTableModel {
             }
             else if(department.equals("all"))
             {
-                listeBesetztFilter = listeBesetzt;
+                listeBesetztFilter = (LinkedList<Guide>) listeBesetzt.clone();
             }
             
         }
