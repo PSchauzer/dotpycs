@@ -599,7 +599,8 @@ public class DotPycsGUI extends JFrame {
 
         try {
 
-            String id = txtGuideID.getText();
+            String id = RFIDController.GetEduCardId();
+            txtGuideID.setText(id);
             String nachname = txtLastname.getText();
             String vorname = txtFirstname.getText();
             String skypeName = txtSkypeID.getText();
