@@ -56,9 +56,8 @@ public class TableModelUebersichtBesetzt extends AbstractTableModel {
 
     public void filterListe(String department) {
         listeBesetztFilter.clear();
-        for (Guide g : listeBesetzt) {
-            
-
+        for (Guide g : listeBesetzt) 
+        {
             if (department.equals("MECHA/AUT") && g.getDept().equals("MECHA/AUT") && !listeBesetztFilter.contains(g))
             {
                 listeBesetztFilter.add(g);
@@ -69,9 +68,8 @@ public class TableModelUebersichtBesetzt extends AbstractTableModel {
             }
             else if(department.equals("all"))
             {
-                listeBesetztFilter = listeBesetzt;
+                listeBesetztFilter = (LinkedList<Guide>) listeBesetzt.clone();
             }
-            
         }
         Collections.sort(listeBesetztFilter, new GuideComparer());
         this.fireTableRowsUpdated(0, listeBesetztFilter.size());

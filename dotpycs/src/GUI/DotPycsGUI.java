@@ -452,7 +452,6 @@ public class DotPycsGUI extends JFrame {
                 super.mouseReleased(e);
                 System.out.println("not implemented yet");
             }
-
         });
 
         menuItem3.addMouseListener(new MouseAdapter() {
@@ -463,7 +462,6 @@ public class DotPycsGUI extends JFrame {
                 String name = ModelFrei.getGuideNameinSpecificRow(currentRow);
                 JOptionPane.showMessageDialog(null, "Die Telefonnummer von " + name + " lautet " + telNo);
             }
-
         });
 
         btJetztNorth.addActionListener(new ActionListener() {
