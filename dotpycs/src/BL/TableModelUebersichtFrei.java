@@ -106,4 +106,9 @@ public class TableModelUebersichtFrei extends AbstractTableModel {
         br.close();
 
     }
+    
+    public Guide getGuideFromIndex(int i)
+    {
+        return listeFreiFilter.get(i);
+    }
 }

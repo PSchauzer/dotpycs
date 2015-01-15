@@ -7,7 +7,6 @@ package GUI;
 
 import com.dotPycsLib.Modelclasses.*;
 import BL.ScrollPaneWithWatermark;
-import BL.SkypeThread;
 import BL.TableModelUebersichtBesetzt;
 import BL.TableModelUebersichtFrei;
 import BL.TableRendererUebersichtBesetzt;
@@ -115,7 +114,6 @@ public class DotPycsGUI extends JFrame {
         paStatistik = new JPanel();
         tableBesetzt = new JTable();
         tableFrei = new JTable();
-        popupCall = new JPopupMenu();
         menuItem1 = new JMenuItem();
         menuItem2 = new JMenuItem();
         menuItem3 = new JMenuItem();
@@ -309,9 +307,6 @@ public class DotPycsGUI extends JFrame {
         coDept.addItem("EDV");
         coDept.addItem("MECHA/AUT");
 
-        popupCall.add(menuItem1);
-        popupCall.add(menuItem2);
-        popupCall.add(menuItem3);
         paUebersicht.add(paUebersichtNorth);
         paUebersicht.add(paUebersichtSouth);
         con.add(tabPane);
@@ -430,13 +425,29 @@ public class DotPycsGUI extends JFrame {
                         Point point = e.getPoint();
                         currentRow = tableFrei.rowAtPoint(point);
                         if (ModelFrei.getGuideNameinSpecificRow(tableFrei.getSelectedRow()).equals(ModelFrei.getGuideNameinSpecificRow(currentRow))) {
+                            popupCall = new JPopupMenu();
                             menuItem1.setText(ModelFrei.getGuideNameinSpecificRow(currentRow) + " eine Führungsanfrage schicken");
                             menuItem2.setText(ModelFrei.getGuideNameinSpecificRow(currentRow) + " anrufen");
                             menuItem3.setText(ModelFrei.getGuideNameinSpecificRow(currentRow) + "'s Telefonnummer anzeigen");
+                            popupCall.add(menuItem1);
+                            popupCall.add(menuItem2);
+                            popupCall.add(menuItem3);
                             popupCall.show(tableFrei, e.getX(), e.getY());
                         }
-                    } else {
+                    } else if (tableFrei.getSelectedRowCount() >= 1) {
+                        Point point = e.getPoint();
+                        currentRow = tableFrei.rowAtPoint(point);
 
+                        int[] selected = tableFrei.getSelectedRows();
+                        for (int i = 0; i < selected.length; i++) {
+                            if (selected[i] == currentRow) {
+                                popupCall = new JPopupMenu();
+                                menuItem1.setText("Allen markierten Guides eine Führungsanfrage schicken");
+                                popupCall.add(menuItem1);
+                                popupCall.show(tableFrei, e.getX(), e.getY());
+                                break;
+                            }
+                        }
                     }
                 }
             }
@@ -447,7 +458,17 @@ public class DotPycsGUI extends JFrame {
             public void mouseReleased(MouseEvent e) {
                 super.mouseReleased(e);
                 try {
-                    Skypeadapter.sendMessage("philipp.schauzer", "Hallo, komme bitte zum Eingang, es werden Guides gebraucht! Danke");
+                    if (menuItem1.getText().contains("Allen")) {
+                        int[] selected = tableFrei.getSelectedRows();
+                        if (selected.length == 1) {
+                            Guide g = ModelFrei.getGuideFromIndex(selected[0]);
+                            Skypeadapter.sendMessage(g.getSkype_id(), "Hallo, komme bitte zum Eingang, es werden Guides gebraucht! Danke");
+                        }
+                    } else 
+                    {
+                        
+                    }
+
                 } catch (SkypeException ex) {
                     Logger.getLogger(DotPycsGUI.class.getName()).log(Level.SEVERE, null, ex);
                 }
@@ -458,11 +479,18 @@ public class DotPycsGUI extends JFrame {
             @Override
             public void mouseReleased(MouseEvent e) {
                 super.mouseReleased(e);
-                SkypeThread st = new SkypeThread("corinna_kindlhofer");
-                Thread t = new Thread(st);
-                t.start();
+                try {
+                    int[] selected = tableFrei.getSelectedRows();
+                    if (selected.length == 1) {
+                        Guide g = ModelFrei.getGuideFromIndex(selected[0]);
+                        Skypeadapter.call(g.getSkype_id());
+                    }
+                } catch (SkypeException ex) {
+                    Logger.getLogger(DotPycsGUI.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (InterruptedException ex) {
+                    Logger.getLogger(DotPycsGUI.class.getName()).log(Level.SEVERE, null, ex);
+                }
             }
-
         });
 
         menuItem3.addMouseListener(new MouseAdapter() {
@@ -507,22 +535,8 @@ public class DotPycsGUI extends JFrame {
 //--------------------------TABELLE TESTEN-----------------------------------------
 
         //ENIS AUF STRING ÄNDERN
-        Guide g = new Guide("999", "Lushtaku", "Enis", "4AHIF", "geileralbaner", "066466666", "EDV");
-        Guide g2 = new Guide("999", "Micevic", "Tin", "4BHIF", "geilerkroate", "066466666", "EDV");
-        Guide g3 = new Guide("999", "Schmidt", "Marcel", "4CHIF", "geileroesterreicher", "066466666", "EDV");
-        Guide g4 = new Guide("999", "Herbst", "Bernhard", "5AHMIA", "generellnetgeil", "066466666", "MECHA/AUT");
-        ModelFrei.addGuide(g);
-        ModelBesetzt.addGuide(g);
-        ModelFrei.addGuide(g2);
-        ModelBesetzt.addGuide(g2);
-        ModelFrei.addGuide(g3);
-        ModelBesetzt.addGuide(g3);
-        ModelFrei.addGuide(g4);
-        ModelBesetzt.addGuide(g4);
-        
-        for(int i = 0; i<100; i++)
-        {
-            Guide asdf = new Guide(""+i, "Lushtaku"+i, "Enis", "4AHIF", "geileralbaner", "066466666", "EDV");
+        for (int i = 0; i < 100; i++) {
+            Guide asdf = new Guide("" + i, "Lushtaku" + i, "Enis", "4AHIF", "philipp.schauzer", "066466666", "EDV");
             ModelFrei.addGuide(asdf);
         }
 
