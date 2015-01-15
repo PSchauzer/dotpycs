@@ -7,6 +7,7 @@ package GUI;
 
 import com.dotPycsLib.Modelclasses.*;
 import BL.ScrollPaneWithWatermark;
+import BL.SkypeThread;
 import BL.TableModelUebersichtBesetzt;
 import BL.TableModelUebersichtFrei;
 import BL.TableRendererUebersichtBesetzt;
@@ -457,13 +458,9 @@ public class DotPycsGUI extends JFrame {
             @Override
             public void mouseReleased(MouseEvent e) {
                 super.mouseReleased(e);
-                try {
-                    Skypeadapter.call("philipp.schauzer");
-                } catch (SkypeException ex) {
-                    Logger.getLogger(DotPycsGUI.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (InterruptedException ex) {
-                    Logger.getLogger(DotPycsGUI.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                SkypeThread st = new SkypeThread("corinna_kindlhofer");
+                Thread t = new Thread(st);
+                t.start();
             }
 
         });
