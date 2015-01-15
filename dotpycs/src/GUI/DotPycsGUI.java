@@ -7,6 +7,7 @@ package GUI;
 
 import com.dotPycsLib.Modelclasses.*;
 import BL.ScrollPaneWithWatermark;
+import BL.SkypeThread;
 import BL.TableModelUebersichtBesetzt;
 import BL.TableModelUebersichtFrei;
 import BL.TableRendererUebersichtBesetzt;
@@ -479,16 +480,13 @@ public class DotPycsGUI extends JFrame {
             @Override
             public void mouseReleased(MouseEvent e) {
                 super.mouseReleased(e);
-                try {
-                    int[] selected = tableFrei.getSelectedRows();
-                    if (selected.length == 1) {
-                        Guide g = ModelFrei.getGuideFromIndex(selected[0]);
-                        Skypeadapter.call(g.getSkype_id());
-                    }
-                } catch (SkypeException ex) {
-                    Logger.getLogger(DotPycsGUI.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (InterruptedException ex) {
-                    Logger.getLogger(DotPycsGUI.class.getName()).log(Level.SEVERE, null, ex);
+                int[] selected = tableFrei.getSelectedRows();
+                if (selected.length == 1) {
+                    Guide g = ModelFrei.getGuideFromIndex(selected[0]);
+                    //Skypeadapter.call(g.getSkype_id());
+                    SkypeThread st = new SkypeThread(g.getSkype_id());
+                    Thread t = new Thread(st);
+                    t.start();
                 }
             }
         });
@@ -650,19 +648,19 @@ public class DotPycsGUI extends JFrame {
     }
 
     public void firstInit() {
-        try {
-            JFileChooser fc = new JFileChooser();
-            fc.showOpenDialog(null);
-            File f = fc.getSelectedFile();
-            if (f != null) {
-                String pathname = f.getAbsolutePath();
+          try {
+            System.out.println("firstInit");
+            JFileChooser chooser = new JFileChooser();
+            int rueckgabewert = chooser.showOpenDialog(null);
+  
+            if(rueckgabewert == JFileChooser.APPROVE_OPTION)
+            {
+                String file = chooser.getSelectedFile().getAbsolutePath();
+                System.out.println(file);
+                ModelFrei.firstInit(file);
 
-                TableModelUebersichtFrei tmuf = new TableModelUebersichtFrei();
-
-                tmuf.firstInit(pathname);
-                tableFrei.updateUI();
             }
-        } catch (IOException ex) {
+        } catch (Exception ex) {
             Logger.getLogger(DotPycsGUI.class.getName()).log(Level.SEVERE, null, ex);
         }
     }

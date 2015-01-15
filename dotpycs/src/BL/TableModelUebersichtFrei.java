@@ -90,8 +90,10 @@ public class TableModelUebersichtFrei extends AbstractTableModel {
 
     public void firstInit(String filename) throws FileNotFoundException, IOException 
     {       
+        System.out.println("firstInit2");
         FileReader fr = new FileReader(filename);
         BufferedReader br = new BufferedReader(fr);
+        
         String str = "";
         String[] strArray;
         
@@ -101,7 +103,7 @@ public class TableModelUebersichtFrei extends AbstractTableModel {
             strArray = str.split(";");
             Guide g = new Guide(strArray[0], strArray[1], strArray[2], strArray[3], strArray[4], strArray[5], strArray[6]);
             
-            this.addGuide(g);
+            addGuide(g);
         }
         br.close();
 
