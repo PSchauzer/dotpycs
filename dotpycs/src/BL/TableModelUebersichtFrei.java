@@ -80,7 +80,7 @@ public class TableModelUebersichtFrei extends AbstractTableModel {
             } else if (department.equals("EDV") && g.getDept().equals("EDV") && !listeFreiFilter.contains(g)) {
                 listeFreiFilter.add(g);
             } else if (department.equals("all")) {
-                listeFreiFilter = listeFrei;
+                listeFreiFilter = (LinkedList<Guide>) listeFrei.clone();
             }
 
         }
