@@ -55,7 +55,11 @@ import javax.swing.border.TitledBorder;
 import javax.swing.text.html.HTMLEditorKit;
 import com.dotPycsLib.*;
 import com.skype.SkypeException;
+import java.awt.Image;
+import java.nio.file.FileStore;
 import java.sql.SQLException;
+import javax.swing.Icon;
+import javax.swing.ImageIcon;
 
 /**
  *
@@ -112,9 +116,9 @@ public class DotPycsGUI extends JFrame {
         paUebersicht = new JPanel();
         paVerwalten = new JPanel();
         paImpressum = new JPanel();
-        paStatistik = new JPanel();
         tableBesetzt = new JTable();
         tableFrei = new JTable();
+        popupCall = new JPopupMenu();
         menuItem1 = new JMenuItem();
         menuItem2 = new JMenuItem();
         menuItem3 = new JMenuItem();
@@ -174,7 +178,10 @@ public class DotPycsGUI extends JFrame {
         lbDept = new JLabel();
         btAdden = new JButton();
         lbPlatzhalter = new JLabel();
-
+        paVerwaltenSouthEast = new JPanel(); 
+  
+        lbVerwaltenSouthEast = new JLabel();
+        
         txtGuideID.setEnabled(false);
 
         //Tabs auf der linken Seite anzeigen
@@ -196,8 +203,6 @@ public class DotPycsGUI extends JFrame {
         paUebersicht.setBackground(Color.white);
         paVerwalten.setBackground(Color.white);
         paImpressum.setBackground(Color.white);
-        paStatistik.setOpaque(true);
-        paStatistik.setBackground(Color.white);
         paUebersichtNorth.setOpaque(true);
         paUebersichtNorth.setBackground(Color.white);
         paUebersichtSouth.setOpaque(true);
@@ -236,6 +241,14 @@ public class DotPycsGUI extends JFrame {
         paVerwaltenPanel3South.setLayout(new GridLayout(1, 2));
         paVerwaltenPanel4South.setLayout(new GridLayout(1, 2));
 
+        
+        //Bild Setzen
+        
+        ImageIcon img = new ImageIcon(System.getProperty("user.dir")+File.separator+"src"+ File.separator+"res"+File.separator+"logo.png");
+
+        lbVerwaltenSouthEast = new JLabel(img);
+        
+        
         //set checkboxen Text
         cbEdvFrei.setText("EDV");
         cbAutMechaFrei.setText("MECHA/AUT");
@@ -254,11 +267,10 @@ public class DotPycsGUI extends JFrame {
         //Adden von sämtlichen Komponenten
         tabPane.addTab("Übersicht", paUebersicht);
         tabPane.addTab("Verwalten", paVerwalten);
-        tabPane.addTab("Statistik", paStatistik);
         tabPane.addTab("Impressum", paImpressum);
 
         //Bearbeiten Komponenten paVerwaltenSouth
-        paVerwaltenSouth.setLayout(new BorderLayout());
+        paVerwaltenSouth.setLayout(new GridLayout(1,2));
         paVerwaltenSouthSouth.setLayout(new GridLayout(8, 2));
 
         //Beschriften von Komponenten auf paVerwaltenSouthSouth
@@ -308,6 +320,9 @@ public class DotPycsGUI extends JFrame {
         coDept.addItem("EDV");
         coDept.addItem("MECHA/AUT");
 
+        popupCall.add(menuItem1);
+        popupCall.add(menuItem2);
+        popupCall.add(menuItem3);
         paUebersicht.add(paUebersichtNorth);
         paUebersicht.add(paUebersichtSouth);
         con.add(tabPane);
@@ -368,7 +383,10 @@ public class DotPycsGUI extends JFrame {
             paVerwaltenNorthSouth.add(new JPanel());
         }
 
+        //Adden von Komponenten auf paVerwaltenSouthEast
+        paVerwaltenSouthEast.add(lbVerwaltenSouthEast); 
         //Adden von Komponenten auf paVerwaltenSouthSouth
+        
         paVerwaltenSouthSouth.add(lbGuideID);
         paVerwaltenSouthSouth.add(txtGuideID);
         paVerwaltenSouthSouth.add(lbLastname);
@@ -386,13 +404,13 @@ public class DotPycsGUI extends JFrame {
         paVerwaltenSouthSouth.add(lbPlatzhalter);
         paVerwaltenSouthSouth.add(btAdden);
 
-        paVerwaltenSouth.add(paVerwaltenSouthSouth, BorderLayout.CENTER);
+        paVerwaltenSouth.add(paVerwaltenSouthSouth);
+        paVerwaltenSouth.add(paVerwaltenSouthEast);
 
         //Tabs designen
         tabPane.setBackgroundAt(0, Color.white);
         tabPane.setBackgroundAt(1, Color.white);
         tabPane.setBackgroundAt(2, Color.white);
-        tabPane.setBackgroundAt(3, Color.white);
         tabPane.setFont(new Font("Calibri Light", Font.PLAIN, 25));
 
         //paUebersicht designen
@@ -412,10 +430,10 @@ public class DotPycsGUI extends JFrame {
         //Models bzw. Renderer setzen
         tableBesetzt.setModel(ModelBesetzt);
         tableFrei.setModel(ModelFrei);
-        //tableBesetzt.setDefaultRenderer(Object.class, new TableRendererUebersichtBesetzt());
+        tableBesetzt.setDefaultRenderer(Object.class, new TableRendererUebersichtBesetzt());
         tableFrei.setDefaultRenderer(Object.class, new TableRendererUebersichtFrei());
 
-        //Events setzen
+         //Events setzen
         tableFrei.addMouseListener(new MouseAdapter() {
 
             @Override
@@ -501,6 +519,7 @@ public class DotPycsGUI extends JFrame {
             }
         });
 
+
         btJetztNorth.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -533,8 +552,22 @@ public class DotPycsGUI extends JFrame {
 //--------------------------TABELLE TESTEN-----------------------------------------
 
         //ENIS AUF STRING ÄNDERN
-        for (int i = 0; i < 100; i++) {
-            Guide asdf = new Guide("" + i, "Lushtaku" + i, "Enis", "4AHIF", "philipp.schauzer", "066466666", "EDV");
+        Guide g = new Guide("999", "Lushtaku", "Enis", "4AHIF", "geileralbaner", "066466666", "EDV");
+        Guide g2 = new Guide("999", "Micevic", "Tin", "4BHIF", "geilerkroate", "066466666", "EDV");
+        Guide g3 = new Guide("999", "Schmidt", "Marcel", "4CHIF", "geileroesterreicher", "066466666", "EDV");
+        Guide g4 = new Guide("999", "Herbst", "Bernhard", "5AHMIA", "generellnetgeil", "066466666", "MECHA/AUT");
+        ModelFrei.addGuide(g);
+        ModelBesetzt.addGuide(g);
+        ModelFrei.addGuide(g2);
+        ModelBesetzt.addGuide(g2);
+        ModelFrei.addGuide(g3);
+        ModelBesetzt.addGuide(g3);
+        ModelFrei.addGuide(g4);
+        ModelBesetzt.addGuide(g4);
+        
+        for(int i = 0; i<100; i++)
+        {
+            Guide asdf = new Guide(""+i, "Lushtaku"+i, "Enis", "4AHIF", "geileralbaner", "066466666", "EDV");
             ModelFrei.addGuide(asdf);
         }
 
@@ -648,19 +681,19 @@ public class DotPycsGUI extends JFrame {
     }
 
     public void firstInit() {
-          try {
-            System.out.println("firstInit");
-            JFileChooser chooser = new JFileChooser();
-            int rueckgabewert = chooser.showOpenDialog(null);
-  
-            if(rueckgabewert == JFileChooser.APPROVE_OPTION)
-            {
-                String file = chooser.getSelectedFile().getAbsolutePath();
-                System.out.println(file);
-                ModelFrei.firstInit(file);
+        try {
+            JFileChooser fc = new JFileChooser();
+            fc.showOpenDialog(null);
+            File f = fc.getSelectedFile();
+            if (f != null) {
+                String pathname = f.getAbsolutePath();
 
+                TableModelUebersichtFrei tmuf = new TableModelUebersichtFrei();
+
+                tmuf.firstInit(pathname);
+                tableFrei.updateUI();
             }
-        } catch (Exception ex) {
+        } catch (IOException ex) {
             Logger.getLogger(DotPycsGUI.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -675,7 +708,6 @@ public class DotPycsGUI extends JFrame {
     private JPanel paUebersichtSouth;
     private JPanel paVerwalten;
     private JPanel paImpressum;
-    private JPanel paStatistik;
     private JTable tableBesetzt;
     private JTable tableFrei;
     private JPopupMenu popupCall;
@@ -734,4 +766,6 @@ public class DotPycsGUI extends JFrame {
     private JLabel lbDept;
     private JButton btAdden;
     private JLabel lbPlatzhalter;
+    private JPanel paVerwaltenSouthEast; 
+    private JLabel lbVerwaltenSouthEast;
 }
