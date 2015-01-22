@@ -54,6 +54,7 @@ import javax.swing.border.TitledBorder;
 import javax.swing.text.html.HTMLEditorKit;
 import com.dotPycsLib.*;
 import com.skype.SkypeException;
+import java.awt.Toolkit;
 import java.sql.SQLException;
 import javax.swing.ImageIcon;
 
@@ -73,6 +74,8 @@ public class DotPycsGUI extends JFrame {
     SpinnerDateModel smNorth = new SpinnerDateModel(date, null, null, Calendar.MINUTE);
     SpinnerDateModel smSouth = new SpinnerDateModel(date, null, null, Calendar.MINUTE);
     private DataBaseQueries dbq;
+    private final static int size = 20;
+    
 
     public DotPycsGUI() throws HeadlessException {
 
@@ -134,11 +137,11 @@ public class DotPycsGUI extends JFrame {
         btReadCSV = new JButton("CSV - Datei einlesen");
         paVerwaltenNorthNorth = new JPanel();
         paVerwaltenNorthSouth = new JPanel();
-        lbVerwaltenSchuelerNorth = new JLabel("Schüler");
+        lbVerwaltenSchuelerNorth = new JLabel("Schüler:");
         coVerwaltenSchuelerNorth = new JComboBox();
-        lbVerwaltenAbteilungNorth = new JLabel("Abteilung");
+        lbVerwaltenAbteilungNorth = new JLabel("Abteilung:");
         coVerwaltenAbteilungNorth = new JComboBox();
-        lbStartFuehrungNorth = new JLabel("Startzeit der Führung");
+        lbStartFuehrungNorth = new JLabel("Startzeit der Führung:");
         jsStartFuehrungNorth = new JSpinner();
         btJetztNorth = new JButton("jetzt");
         btBuchenNorth = new JButton("Buchen");
@@ -147,11 +150,11 @@ public class DotPycsGUI extends JFrame {
         paVerwaltenPanel3North = new JPanel();
         paVerwaltenPanel4North = new JPanel();
         jsStartFuehrungNorth = new JSpinner(smNorth);
-        lbVerwaltenSchuelerSouth = new JLabel("Schüler");
+        lbVerwaltenSchuelerSouth = new JLabel("Schüler:");
         coVerwaltenSchuelerSouth = new JComboBox();
-        lbVerwaltenAbteilungSouth = new JLabel("Abteilung");
+        lbVerwaltenAbteilungSouth = new JLabel("Abteilung:");
         coVerwaltenAbteilungSouth = new JComboBox();
-        lbEndFuehrungSouth = new JLabel("Endzeit der Führung");
+        lbEndFuehrungSouth = new JLabel("Endzeit der Führung:");
         jsEndFuehrungSouth = new JSpinner(smSouth);
         btBuchenSouth = new JButton("Buchen");
         paVerwaltenPanel1South = new JPanel();
@@ -228,12 +231,12 @@ public class DotPycsGUI extends JFrame {
         lbFilterBesetzt.setLayout(new GridLayout(1, 15));
         paVerwalten.setLayout(new GridLayout(2, 1));
         paVerwaltenNorth.setLayout(new GridLayout(1, 2));
-        paVerwaltenNorthNorth.setLayout(new GridLayout(14, 1));
+        paVerwaltenNorthNorth.setLayout(new GridLayout(8, 1));
         paVerwaltenPanel1North.setLayout(new GridLayout(1, 2));
         paVerwaltenPanel2North.setLayout(new GridLayout(1, 2));
         paVerwaltenPanel3North.setLayout(new GridLayout(1, 2));
         paVerwaltenPanel4North.setLayout(new GridLayout(1, 2));
-        paVerwaltenNorthSouth.setLayout(new GridLayout(14, 1));
+        paVerwaltenNorthSouth.setLayout(new GridLayout(8, 1));
         paVerwaltenPanel1South.setLayout(new GridLayout(1, 2));
         paVerwaltenPanel2South.setLayout(new GridLayout(1, 2));
         paVerwaltenPanel3South.setLayout(new GridLayout(1, 2));
@@ -242,9 +245,8 @@ public class DotPycsGUI extends JFrame {
         
         //Bild Setzen
         ImageIcon img = new ImageIcon(System.getProperty("user.dir")+File.separator+"src"+ File.separator+"res"+File.separator+"logo.png");
-
         lbVerwaltenSouthEast = new JLabel(img);
-        
+        this.setIconImage(img.getImage());
         
         //set checkboxen Text
         cbEdvFrei.setText("EDV");
@@ -279,9 +281,24 @@ public class DotPycsGUI extends JFrame {
         lbTelNo.setText("Tel.Nr.:");
         lbDept.setText("Abteilung:");
         btAdden.setText("Guide hinzufügen");
-
+        
+        lbGuideID.setFont(new Font("Calibri Light", Font.BOLD, size)); //asdasdasddddddddddddddddddddddddddddddddddddddd
+        lbLastname.setFont(new Font("Calibri Light", Font.BOLD, size));
+        lbFirstname.setFont(new Font("Calibri Light", Font.BOLD, size));
+        lbGuideClass.setFont(new Font("Calibri Light", Font.BOLD, size));
+        lbSkypeID.setFont(new Font("Calibri Light", Font.BOLD, size));
+        lbTelNo.setFont(new Font("Calibri Light", Font.BOLD, size));
+        lbDept.setFont(new Font("Calibri Light", Font.BOLD, size));
+        btAdden.setFont(new Font("Calibri Light", Font.BOLD, size));
+        coDept.setFont(new Font("Calibri Light", Font.PLAIN, size));
+        coGuideClass.setFont(new Font("Calibri Light", Font.PLAIN, size));
+        txtLastname.setFont(new Font("Calibri Light", Font.PLAIN, size));
+        txtFirstname.setFont(new Font("Calibri Light", Font.PLAIN, size));
+        txtSkypeID.setFont(new Font("Calibri Light", Font.PLAIN, size));
+        txtTelNo.setFont(new Font("Calibri Light", Font.PLAIN, size));
+        
+        
         impressum = new JEditorPane();
-        //impressum.setBorder(new TitledBorder("Impressum"));
         impressum.setEditorKit(new HTMLEditorKit());
 
         impressum.setText("<br/><h1>Haftungshinweis:</h1><p>Trotz sorgfältiger inhaltlicher "
@@ -348,7 +365,7 @@ public class DotPycsGUI extends JFrame {
         paVerwaltenNorth.add(paVerwaltenNorthNorth);
         paVerwaltenNorth.add(paVerwaltenNorthSouth);
 
-        paVerwaltenNorthNorth.add(paVerwaltenPanel1North);
+        paVerwaltenNorthNorth.add(paVerwaltenPanel1North); //saaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
         paVerwaltenNorthNorth.add(paVerwaltenPanel2North);
         paVerwaltenNorthNorth.add(paVerwaltenPanel3North);
         paVerwaltenNorthNorth.add(btBuchenNorth);
@@ -360,7 +377,18 @@ public class DotPycsGUI extends JFrame {
         paVerwaltenPanel3North.add(paVerwaltenPanel4North);
         paVerwaltenPanel4North.add(btJetztNorth);
         paVerwaltenPanel4North.add(jsStartFuehrungNorth);
-        for (int i = 0; i < 10; i++) {
+        
+        //Font setzen paVerwaltenNorthNorth
+        lbVerwaltenSchuelerNorth.setFont(new Font("Calibri Light", Font.BOLD, size));
+        lbVerwaltenAbteilungNorth.setFont(new Font("Calibri Light", Font.BOLD, size));
+        lbStartFuehrungNorth.setFont(new Font("Calibri Light", Font.BOLD, size));        
+        btJetztNorth.setFont(new Font("Calibri Light", Font.PLAIN, size));        
+        btBuchenNorth.setFont(new Font("Calibri Light", Font.BOLD, size));               
+        coVerwaltenAbteilungNorth.setFont(new Font("Calibri Light", Font.PLAIN, size));        
+        coVerwaltenSchuelerNorth.setFont(new Font("Calibri Light", Font.PLAIN, size));     
+        jsStartFuehrungNorth.setFont(new Font("Calibri Light", Font.PLAIN, size));     
+                
+        for (int i = 0; i < 4; i++) {
             paVerwaltenNorthNorth.add(new JPanel());
         }
 
@@ -376,7 +404,21 @@ public class DotPycsGUI extends JFrame {
         paVerwaltenPanel3South.add(paVerwaltenPanel4South);
         paVerwaltenPanel4South.add(btJetztSouth);
         paVerwaltenPanel4South.add(jsEndFuehrungSouth);
-        for (int i = 0; i < 10; i++) {
+        
+        //Font setzten paVerwaltenSouth
+        btBuchenSouth.setFont(new Font("Calibri Light", Font.BOLD, size));
+        lbVerwaltenSchuelerSouth.setFont(new Font("Calibri Light", Font.BOLD, size));
+        coVerwaltenSchuelerSouth.setFont(new Font("Calibri Light", Font.PLAIN, size));    
+        lbVerwaltenAbteilungSouth.setFont(new Font("Calibri Light", Font.BOLD, size));
+        coVerwaltenAbteilungSouth.setFont(new Font("Calibri Light", Font.PLAIN, size));
+        lbEndFuehrungSouth.setFont(new Font("Calibri Light", Font.BOLD, size));
+        btJetztSouth.setFont(new Font("Calibri Light", Font.PLAIN, size));
+        jsEndFuehrungSouth.setFont(new Font("Calibri Light", Font.PLAIN, size));
+        
+        
+        
+        
+        for (int i = 0; i < 4; i++) {
             paVerwaltenNorthSouth.add(new JPanel());
         }
 
@@ -415,10 +457,24 @@ public class DotPycsGUI extends JFrame {
         tableBesetzt.getTableHeader().setFont(new Font("Calibri Light", Font.PLAIN, 22));
 
         //paVerwalten designen
-        paVerwaltenNorth.setBorder(new TitledBorder("Buchen"));
-        paVerwaltenSouth.setBorder(new TitledBorder("Guide hinzufügen"));
-        paVerwaltenNorthNorth.setBorder(new TitledBorder("Einchecken"));
-        paVerwaltenNorthSouth.setBorder(new TitledBorder("Auschecken"));
+        TitledBorder border1 = new TitledBorder("Buchen");
+        border1.setTitleFont(new Font("Calibri Light", Font.BOLD, size));
+        border1.setTitleColor(new Color(150,168,90));
+        
+        TitledBorder border2 = new TitledBorder("Guide hinzufügen");
+        border2.setTitleFont(new Font("Calibri Light", Font.BOLD, 15));
+        border2.setTitleColor(new Color(150,168,90));
+        TitledBorder border3 = new TitledBorder("Einchecken");
+        border3.setTitleFont(new Font("Calibri Light", Font.BOLD, 15));
+        border3.setTitleColor(new Color(150,168,90));
+        TitledBorder border4 = new TitledBorder("Auschecken");
+        border4.setTitleFont(new Font("Calibri Light", Font.BOLD, 15));
+        border4.setTitleColor(new Color(150,168,90));
+        
+        paVerwaltenNorth.setBorder(border1);
+        paVerwaltenSouth.setBorder(border2);
+        paVerwaltenNorthNorth.setBorder(border3);
+        paVerwaltenNorthSouth.setBorder(border4);
 
         //Spalten verschieben deaktivieren
         tableFrei.getTableHeader().setReorderingAllowed(false);
@@ -663,6 +719,8 @@ public class DotPycsGUI extends JFrame {
             String klasse = coGuideClass.getSelectedItem().toString();
             String abteilung = coDept.getSelectedItem().toString();
 
+           
+            
             Guide g = new Guide(rfid, nachname, vorname, klasse, skypeName, telNr, "EDV");
             ModelFrei.addGuide(g);
             ModelBesetzt.addGuide(g);
