@@ -48,17 +48,13 @@ import javax.swing.JSpinner;
 import javax.swing.JTabbedPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
-import static javax.swing.ListSelectionModel.SINGLE_SELECTION;
 import javax.swing.SpinnerDateModel;
 import javax.swing.UIManager;
 import javax.swing.border.TitledBorder;
 import javax.swing.text.html.HTMLEditorKit;
 import com.dotPycsLib.*;
 import com.skype.SkypeException;
-import java.awt.Image;
-import java.nio.file.FileStore;
 import java.sql.SQLException;
-import javax.swing.Icon;
 import javax.swing.ImageIcon;
 
 /**
@@ -243,7 +239,6 @@ public class DotPycsGUI extends JFrame {
 
         
         //Bild Setzen
-        
         ImageIcon img = new ImageIcon(System.getProperty("user.dir")+File.separator+"src"+ File.separator+"res"+File.separator+"logo.png");
 
         lbVerwaltenSouthEast = new JLabel(img);
@@ -477,15 +472,22 @@ public class DotPycsGUI extends JFrame {
             public void mouseReleased(MouseEvent e) {
                 super.mouseReleased(e);
                 try {
-                    if (menuItem1.getText().contains("Allen")) {
-                        int[] selected = tableFrei.getSelectedRows();
-                        if (selected.length == 1) {
+                    int[] selected = tableFrei.getSelectedRows();
+                    if (menuItem1.getText().contains("Allen")) 
+                    {
+                        for(int i = 0; i<selected.length; i++)
+                        {
+                            Guide g = ModelFrei.getGuideFromIndex(selected[1]);
+                            Skypeadapter.sendMessage(g.getSkype_id(), "Hallo, komme bitte zum Eingang, es werden Guides gebraucht! Danke");
+                        }
+                    } 
+                    else 
+                    {
+                        if (selected.length == 1) 
+                        {
                             Guide g = ModelFrei.getGuideFromIndex(selected[0]);
                             Skypeadapter.sendMessage(g.getSkype_id(), "Hallo, komme bitte zum Eingang, es werden Guides gebraucht! Danke");
                         }
-                    } else 
-                    {
-                        
                     }
 
                 } catch (SkypeException ex) {
@@ -549,29 +551,18 @@ public class DotPycsGUI extends JFrame {
                 JOptionPane.showMessageDialog(con, "Buchen - Auschecken not implemented yet");
             }
         });
-//--------------------------TABELLE TESTEN-----------------------------------------
 
-        //ENIS AUF STRING ÄNDERN
-        Guide g = new Guide("999", "Lushtaku", "Enis", "4AHIF", "geileralbaner", "066466666", "EDV");
-        Guide g2 = new Guide("999", "Micevic", "Tin", "4BHIF", "geilerkroate", "066466666", "EDV");
-        Guide g3 = new Guide("999", "Schmidt", "Marcel", "4CHIF", "geileroesterreicher", "066466666", "EDV");
-        Guide g4 = new Guide("999", "Herbst", "Bernhard", "5AHMIA", "generellnetgeil", "066466666", "MECHA/AUT");
-        ModelFrei.addGuide(g);
-        ModelBesetzt.addGuide(g);
-        ModelFrei.addGuide(g2);
-        ModelBesetzt.addGuide(g2);
-        ModelFrei.addGuide(g3);
-        ModelBesetzt.addGuide(g3);
-        ModelFrei.addGuide(g4);
-        ModelBesetzt.addGuide(g4);
-        
+
+
+        //--------------------------TABELLE TESTEN-----------------------------------------
         for(int i = 0; i<100; i++)
         {
-            Guide asdf = new Guide(""+i, "Lushtaku"+i, "Enis", "4AHIF", "geileralbaner", "066466666", "EDV");
+            Guide asdf = new Guide(""+i, "Bernhard"+i, "Herbst", "4BHMIA", "dotPYCS_EDV_1", "066466666", "MECHA/AUT");
             ModelFrei.addGuide(asdf);
         }
-
         //------------------------TESTEN ENDE---------------------------------------------
+        
+        
         cbAutMechaFrei.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
