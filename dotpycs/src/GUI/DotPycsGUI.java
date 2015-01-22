@@ -613,11 +613,7 @@ public class DotPycsGUI extends JFrame {
 
 
         //--------------------------TABELLE TESTEN-----------------------------------------
-        for(int i = 0; i<100; i++)
-        {
-            Guide asdf = new Guide(""+i, "Bernhard"+i, "Herbst", "4BHMIA", "dotPYCS_EDV_1", "066466666", "MECHA/AUT");
-            ModelFrei.addGuide(asdf);
-        }
+
         //------------------------TESTEN ENDE---------------------------------------------
         
         
@@ -718,8 +714,6 @@ public class DotPycsGUI extends JFrame {
             String telNr = txtTelNo.getText();
             String klasse = coGuideClass.getSelectedItem().toString();
             String abteilung = coDept.getSelectedItem().toString();
-
-           
             
             Guide g = new Guide(rfid, nachname, vorname, klasse, skypeName, telNr, "EDV");
             ModelFrei.addGuide(g);
@@ -739,9 +733,9 @@ public class DotPycsGUI extends JFrame {
             if (f != null) {
                 String pathname = f.getAbsolutePath();
 
-                TableModelUebersichtFrei tmuf = new TableModelUebersichtFrei();
+                
 
-                tmuf.firstInit(pathname);
+                ModelFrei.firstInit(pathname);
                 tableFrei.updateUI();
             }
         } catch (IOException ex) {

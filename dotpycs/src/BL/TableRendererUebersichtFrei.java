@@ -33,14 +33,13 @@ public class TableRendererUebersichtFrei implements TableCellRenderer
 //        }
 //        
         label.setBorder(new CompoundBorder(new EmptyBorder(new Insets(1, 4, 1, 4)), label.getBorder()));
-        
         label.setOpaque(true);
         
         if(isSelected)
         {
             label.setBackground(new Color(150,168,90));
         }
-        
+
         return label;
     }
 }
