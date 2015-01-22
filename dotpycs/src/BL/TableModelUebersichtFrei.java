@@ -56,7 +56,6 @@ public class TableModelUebersichtFrei extends AbstractTableModel {
         }
         Collections.sort(listeFrei, new GuideComparer());
         listeFreiFilter = (LinkedList<Guide>) listeFrei.clone();
-        System.out.println(listeFreiFilter.size());
         fireTableRowsInserted(0, listeFreiFilter.size());
     }
 
@@ -71,10 +70,6 @@ public class TableModelUebersichtFrei extends AbstractTableModel {
     public void filterListe(String department) {
         listeFreiFilter.clear();
         for (Guide g : listeFrei) {
-
-            System.out.println("g-DEPT: " + g.getDept());
-            System.out.println("dept: " + department);
-
             if (department.equals("MECHA/AUT") && g.getDept().equals("MECHA/AUT") && !listeFreiFilter.contains(g)) {
                 listeFreiFilter.add(g);
             } else if (department.equals("EDV") && g.getDept().equals("EDV") && !listeFreiFilter.contains(g)) {
@@ -90,7 +85,6 @@ public class TableModelUebersichtFrei extends AbstractTableModel {
 
     public void firstInit(String filename) throws FileNotFoundException, IOException 
     {       
-        System.out.println("firstInit2");
         FileReader fr = new FileReader(filename);
         BufferedReader br = new BufferedReader(fr);
         
